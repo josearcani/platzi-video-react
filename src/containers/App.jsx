@@ -7,28 +7,26 @@ import Carousel from '../components/Carousel'
 import CarouselItem from '../components/CarouselItem'
 import Footer from '../components/Footer'
 
+import useInitialState from '../hooks/useInitialState'
 import '../assets/styles/App.scss'
 
+const API = 'http://localhost:4001/initialState/'
+
 const App = () => {
-  const [ video, setVideo ] = useState([])
-
-  useEffect(() => {
-    fetch('http://localhost:4001/initialState/')
-      .then(response => response.json())
-      .then(data => setVideo(data))
-      .catch(error => console.error(error))
-  }, [])
-
-  console.log(video)
-
-  return (
+  // usamos el hook
+  const initialState = useInitialState(API)
+  return initialState.length === 0 ? <h1>Loading</h1> : (
     <div className="App">
       <Header />
       <Search />
-      {video.mylist?.length > 0 &&
+      {initialState.mylist?.length > 0 &&
         <Categories title="Mi lista">
           <Carousel>
-            <CarouselItem />
+            {
+              initialState.mylist?.map(item => {
+                return <CarouselItem key={item.id} {...item} />
+              })
+            }
           </Carousel>
         </Categories>
       }
@@ -36,7 +34,7 @@ const App = () => {
       <Categories title="Tendencias">
         <Carousel>
           {
-            video.trends?.map(item => {
+            initialState.trends?.map(item => {
               return <CarouselItem key={item.id} {...item} />
             })
           }
@@ -45,8 +43,11 @@ const App = () => {
   
       <Categories title="Originales de Platzi Video">
         <Carousel>
-          <CarouselItem />
-          <CarouselItem />
+          {
+            initialState.originals?.map(item => {
+              return <CarouselItem key={item.id} {...item} />
+            })
+          }
         </Carousel>
       </Categories>
       <Footer />
