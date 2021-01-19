@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
 import Search from '../components/Search'
@@ -6,7 +6,6 @@ import Categories from '../components/Categories'
 import Carousel from '../components/Carousel'
 import CarouselItem from '../components/CarouselItem'
 
-import useInitialState from '../hooks/useInitialState'
 import '../assets/styles/Home.scss'
 
 
@@ -19,7 +18,7 @@ const Home = ({ myList, trends, originals }) => {
           <Carousel>
             {
               myList.map(item => {
-                return <CarouselItem key={item.id} {...item} />
+                return <CarouselItem key={item.id} {...item} isList />
               })
             }
           </Carousel>
