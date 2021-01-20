@@ -66,6 +66,7 @@ CarouselItem.propTypes = {
 }
 
 const mapDispatchToProps = {
+  // retorna un objeto que sera props del componente con valores que son las acciones
   setFavorite,
   deleteFavorite,
 }

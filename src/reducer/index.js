@@ -1,5 +1,3 @@
-import { element } from "prop-types"
-
 const reducer = (state, action) => {
   switch (action.type) {
     case 'SET_FAVORITE':
