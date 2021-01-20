@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import Logo from '../assets/static/logo-platzi-video-BW2.png'
 import userIcon from '../assets/static/user-icon.png'
 import '../assets/styles/components/Header.scss'
+
 const Header = () => (
   <header className="header">
     <Link to="/">

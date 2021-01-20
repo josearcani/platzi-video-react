@@ -8,13 +8,16 @@ import '../assets/styles/components/Login.scss'
 const Login = () => {
   const [form, setValues] = useState({
     email: '',
+    password: '',
   })
   
   // cosntante para cambiar los cambios en los input
   const handleInput = e => {
+    const name = e.target.name
+    const value = e.target.value
     setValues({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: value,
       // de manera dinámica se guardan los values
     })
   }
@@ -37,29 +40,41 @@ const Login = () => {
             className="input"
             type="text"
             placeholder="Correo"
+            value={form.email}
             onChange={handleInput}
           />
           <input
             name="password"
             className="input"
             type="password"
+            value={form.password}
             placeholder="Contraseña"
             onChange={handleInput}
           />
-          <button className="button">Iniciar sesión</button>
+          <button type="submit" className="button">Iniciar sesión</button>
           <div className="login__container--remember-me">
             <label>
-              <input type="checkbox" id="cbox1" value="first_checkbox" />Recuérdame
+              <input
+                type="checkbox"
+                id="cbox1"
+                value="first_checkbox" 
+              />Recuérdame
             </label>
             <a href="/">Olvidé mi contraseña</a>
           </div>
         </form>
         <section className="login__container--social-media">
-          <div><img src={googleIcon} /> Inicia sesión con Google</div>
-          <div><img src={twitterIcon} /> Inicia sesión con Twitter</div>
+          <div>
+            <img src={googleIcon} /> 
+            Inicia sesión con Google
+          </div>
+          <div>
+            <img src={twitterIcon} />
+            Inicia sesión con Twitter
+          </div>
         </section>
         <p className="login__container--register">
-          No tienes ninguna cuenta
+          No tienes ninguna cuenta 
           <Link to="/register">
             Regístrate
           </Link>
