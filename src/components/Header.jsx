@@ -16,7 +16,6 @@ const Header = (props) => {
   // validamos si user tiene elementos
   const hasUser = Object.keys(user).length > 0
 
-
   const handleLogout = () => {
     // mandamos un objeto vacio reiniciando el estado
     // estamos simulando un logout y login
@@ -51,7 +50,7 @@ const Header = (props) => {
             ? 
             <>
               <li>
-                <a href="#">{user.password}</a>
+                <a href="#">{user.name}</a>
               </li>
               <li>
                 <a href="#logout" onClick={handleLogout}>Cerrar sesión</a>
