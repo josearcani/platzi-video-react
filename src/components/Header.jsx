@@ -1,6 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+
 import { connect } from 'react-redux'
+import { logoutRequest } from '../actions'
 
 import gravatar from '../utils/gravatar'
 
@@ -12,6 +15,14 @@ const Header = (props) => {
   const { user } = props
   // validamos si user tiene elementos
   const hasUser = Object.keys(user).length > 0
+
+
+  const handleLogout = () => {
+    // mandamos un objeto vacio reiniciando el estado
+    // estamos simulando un logout y login
+    props.logoutRequest({})
+  }
+
   return (
     <header className="header">
       <Link to="/">
@@ -35,16 +46,34 @@ const Header = (props) => {
           <p>Perfil</p>
         </div>
         <ul>
-          <li><a href="/">Cuenta</a></li>
-          <li>
-            <Link to="/login">
-              Iniciar Sesión
-            </Link>
-          </li>
+          {
+            hasUser 
+            ? 
+            <>
+              <li>
+                <a href="#">{user.password}</a>
+              </li>
+              <li>
+                <a href="#logout" onClick={handleLogout}>Cerrar sesión</a>
+              </li> 
+            </>
+            :
+            <li>
+              <Link to="/login">
+                Iniciar Sesión
+              </Link>
+            </li>
+          }
         </ul>
       </div>
     </header>
   )
+}
+
+Header.propTypes = {
+  user: PropTypes.object,
+  // llega una funcion, no un objecto
+  logoutRequest: PropTypes.func
 }
 
 const mapStateToProps = (state) => {
@@ -53,4 +82,8 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, null)(Header)
+const mapDispatchToProps = {
+  logoutRequest,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)
