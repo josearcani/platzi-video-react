@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { connect } from 'react-redux'
 import { logoutRequest } from '../actions'
+import classNames from 'classnames'
 
 import gravatar from '../utils/gravatar'
 
@@ -12,8 +13,9 @@ import userIcon from '../assets/static/user-icon.png'
 import '../assets/styles/components/Header.scss'
 
 const Header = (props) => {
-  const { user } = props
-  // validamos si user tiene elementos
+  const { user, isLogin, isRegister } = props
+  // props extra para condicionar el header
+  
   const hasUser = Object.keys(user).length > 0
 
   const handleLogout = () => {
@@ -22,8 +24,11 @@ const Header = (props) => {
     props.logoutRequest({})
   }
 
+  //  validaciones para ver si se encuentra en login y registro
+  const headerClass = classNames('header', {isLogin, isRegister})
+
   return (
-    <header className="header">
+    <header className={headerClass}>
       <Link to="/">
         <img className="header__img" src={Logo} alt="Platzi Video" />
       </Link>
