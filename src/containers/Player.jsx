@@ -1,24 +1,42 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 
-// import { Link } from 'react-router-dom'
+import { getVideoSource } from '../actions'
+import NotFount from './NotFound'
 
 import '../assets/styles/components/Player.scss'
 
-const Player = () => {
-  return (
-    <div className="Player">
-      <video controls autoPlay>
-        <source src="" type="video/mp4" />
-      </video>
-      <div className="Player-back">
-        {/* <Link to="/"> */}
-          <button type="button">
-            Regresar
-          </button>
-        {/* </Link> */}
-      </div>
-    </div>
-  )
+const Player = (props) => {
+  const { id } = props.match.params
+  const hasPlaying = Object.keys(props.playing).length > 0
+
+  useEffect(() => {
+    props.getVideoSource(id)
+  }, [])
+
+  return hasPlaying ?
+        (
+          <div className="Player">
+            <video controls autoPlay>
+              <source src={props.playing.source} type="video/mp4" />
+            </video>
+            <div className="Player-back">
+              <button type="button" onClick={() => props.history.goBack()}>
+                Regresar
+              </button>
+            </div>
+          </div>
+        ) : <NotFount />
 }
 
-export default Player
+const mapStateToProps = state => {
+  return {
+    playing: state.playing
+  }
+}
+
+const mapDistachToProps = {
+  getVideoSource,
+}
+
+export default connect(mapStateToProps, mapDistachToProps)(Player)
