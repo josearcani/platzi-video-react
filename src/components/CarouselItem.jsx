@@ -70,6 +70,8 @@ CarouselItem.propTypes = {
   year: PropTypes.number,
   contentRating: PropTypes.string,
   duration: PropTypes.number,
+  id: PropTypes.number,
+  isList: PropTypes.bool,
 }
 
 const mapDispatchToProps = {

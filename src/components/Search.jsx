@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import classNames from 'classnames'
 
@@ -15,6 +16,10 @@ const Search = ({ isHome }) => {
       <input type="text" className={inputStyle} placeholder="Buscar..." />
     </section>
   )
+}
+
+Search.propTypes = {
+  isHome: PropTypes.bool,
 }
 
 export default Search

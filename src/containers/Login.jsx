@@ -96,4 +96,4 @@ const mapDispatchToProps = {
   loginRequest,
 }
 
-export default connect(null, mapDispatchToProps) (Login)
+export default connect(null, mapDispatchToProps)(Login)
