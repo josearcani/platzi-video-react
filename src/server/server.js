@@ -1,5 +1,6 @@
 import express from 'express';
 import webpack from 'webpack';
+import helmet from 'helmet';
 
 import React from 'react'
 import { renderToString } from 'react-dom/server' // una funcionalidad especial para servir string
@@ -27,6 +28,11 @@ if (ENV === 'development') {
 
   app.use(webpackDevMiddleware(compiler, serverConfig));
   app.use(webpackHotMiddleware(compiler)); // hacer el hot module replacement de todo el proyecto
+} else {
+  app.use(express.static(`${__dirname}/public`)); // carpeta publica donde estará el bundle de webpack
+  app.use(helmet()); // las config por defecto
+  app.use(helmet.permittedCrossDomainPolicies()); // la que se adecua al proyecto
+  app.disable('x-powered-by'); // deshabilitamos una header asi el navegador no sabe que es un server con express
 }
 
 const setResponse = (html, preloadedState) => {
