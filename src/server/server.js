@@ -29,7 +29,7 @@ if (ENV === 'development') {
   app.use(webpackHotMiddleware(compiler)); // hacer el hot module replacement de todo el proyecto
 }
 
-const setResponse = (html) => {
+const setResponse = (html, preloadedState) => {
   return (`
     <!DOCTYPE html>
     <html lang="en">
@@ -42,6 +42,9 @@ const setResponse = (html) => {
     </head>
     <body>
       <div id="app">${html}</div>
+      <script>
+        window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g,'\\u003c')}
+      </script>
       <script src="assets/app.js" type="text/javascript"></script>
     </body>
     </html>
@@ -51,6 +54,7 @@ const setResponse = (html) => {
 const renderApp = (req, res) => {
   // definimos el store pero sin usar los dev tools de redux
   const store = createStore(reducer, initialState);
+  const preloadedState = store.getState(); // sera pasado al frontend
   const html = renderToString(
     <Provider store={store}>
       <StaticRouter location={req.url} context={{}}>
@@ -58,7 +62,7 @@ const renderApp = (req, res) => {
       </StaticRouter>
     </Provider>
   );
-  res.send(setResponse(html));
+  res.send(setResponse(html, preloadedState));
 };
 
 app.get('*', renderApp);

@@ -7,13 +7,15 @@ import { Router } from 'react-router'; // importamos o instalamos como depProduc
 
 import reducer from './reducer'
 import App from './routes/App'
-import initialState from './initialState'
 
 const history = createBrowserHistory();
 
-const store = createStore(reducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+const preloadedState = window.__PRELOADED_STATE__;
+const store = createStore(reducer, preloadedState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
-ReactDOM.render(
+delete window.__PRELOADED_STATE__;
+
+ReactDOM.hydrate(
   <Provider store={store}>
     <Router history={history}>
       <App />
