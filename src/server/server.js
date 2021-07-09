@@ -13,6 +13,7 @@ import config from  './config';
 import reducer from '../frontend/reducer'
 import initialState from '../frontend/initialState'
 import serverRoutes from '../frontend/routes/serverRoutes'
+import getManifest from './getManifest';
 
 const { ENV, PORT } = config;
 
@@ -29,6 +30,15 @@ if (ENV === 'development') {
   app.use(webpackDevMiddleware(compiler, serverConfig));
   app.use(webpackHotMiddleware(compiler)); // hacer el hot module replacement de todo el proyecto
 } else {
+  // creamos un middleware para manifest inicio
+  app.use((req, res, next) => {
+    // si en hashManifest no hay nada regresar la función getManifest (solo si no existe)
+    if (!req.hashManifest) req.hashManifest = getManifest();
+    // seguimos con el proceso natural de la aplicación
+    next();
+  });
+  // creamos un middleware para manifest fin
+
   app.use(express.static(`${__dirname}/public`)); // carpeta publica donde estará el bundle de webpack
   app.use(helmet()); // las config por defecto
   app.use(helmet.contentSecurityPolicy({
@@ -42,7 +52,10 @@ if (ENV === 'development') {
   app.disable('x-powered-by'); // deshabilitamos una header asi el navegador no sabe que es un server con express
 }
 
-const setResponse = (html, preloadedState) => {
+const setResponse = (html, preloadedState, manifest) => {
+  const mainStyles = manifest ? manifest['main.css'] : 'assets/app.css';
+  const mainBuild = manifest ? manifest['main.js'] : 'assets/app.js'
+
   return (`
     <!DOCTYPE html>
     <html lang="en">
@@ -51,14 +64,14 @@ const setResponse = (html, preloadedState) => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="shortcut icon" href="https://i.postimg.cc/T16gVyD6/badge.png" type="image/x-icon">
       <title>Platzi Video con React</title>
-      <link rel="stylesheet" href="assets/app.css" type="text/css">
+      <link rel="stylesheet" href="${mainStyles}" type="text/css">
     </head>
     <body>
       <div id="app">${html}</div>
       <script>
         window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g,'\\u003c')}
       </script>
-      <script src="assets/app.js" type="text/javascript"></script>
+      <script src="${mainBuild}" type="text/javascript"></script>
     </body>
     </html>
   `)
@@ -75,7 +88,7 @@ const renderApp = (req, res) => {
       </StaticRouter>
     </Provider>
   );
-  res.send(setResponse(html, preloadedState));
+  res.send(setResponse(html, preloadedState, req.hashManifest));
 };
 
 app.get('*', renderApp);
