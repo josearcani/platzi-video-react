@@ -20,7 +20,7 @@ const app = express();
 
 if (ENV === 'development') {
   console.log('Development config');
-  const webpackConfig = require('../../webpack.config');
+  const webpackConfig = require('../../webpack.config.dev');
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
   const compiler = webpack(webpackConfig);
@@ -31,6 +31,13 @@ if (ENV === 'development') {
 } else {
   app.use(express.static(`${__dirname}/public`)); // carpeta publica donde estará el bundle de webpack
   app.use(helmet()); // las config por defecto
+  app.use(helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'", '*'],
+      scriptSrc: ["'self'", "'sha256-v1JBoIesI9TciwINSA3MzVnWXjYZxUyaUNfMbkqTpiQ='"],
+    }
+  }));
   app.use(helmet.permittedCrossDomainPolicies()); // la que se adecua al proyecto
   app.disable('x-powered-by'); // deshabilitamos una header asi el navegador no sabe que es un server con express
 }

@@ -1,16 +1,15 @@
 const path = require('path')
+const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-require('dotenv').config();
-
 module.exports = {
-  entry: ['./src/frontend/index.js'],
+  entry: ['./src/frontend/index.js', 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true'],
   output: {
-    path: path.resolve(__dirname, 'src/server/public'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'assets/app.js',
     publicPath: '/',
   },
-  mode: process.env.ENV,
+  mode: 'development',
   // para resolver las extensiones
   resolve: {
     extensions: ['.js', '.jsx']
@@ -57,6 +56,7 @@ module.exports = {
     historyApiFallback: true
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     new MiniCssExtractPlugin({
       filename: 'assets/app.css',
     })
