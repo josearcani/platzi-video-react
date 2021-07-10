@@ -1,5 +1,3 @@
-/*eslint no-case-declarations: "error"*/
-/*eslint-env es6*/
 const reducer = (state, action) => {
   switch (action.type) {
     case 'SET_FAVORITE': {

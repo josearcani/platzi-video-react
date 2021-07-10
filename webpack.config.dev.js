@@ -1,5 +1,5 @@
-const path = require('path')
-const webpack = require('webpack')
+const path = require('path');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
@@ -14,7 +14,7 @@ module.exports = {
   mode: 'development',
   // para resolver las extensiones
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
   },
   module: {
     rules: [
@@ -22,8 +22,8 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.(s*)css$/,
@@ -39,22 +39,22 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: 'assets/[hash].[ext]'
-            }
-          }
-        ]
-      }
-    ]
+              name: 'assets/[hash].[ext]',
+            },
+          },
+        ],
+      },
+    ],
   },
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new ESLintPlugin(),
     new MiniCssExtractPlugin({
       filename: 'assets/app.css',
-    })
+    }),
   ],
   optimization: {
     minimize: true,
@@ -74,8 +74,8 @@ module.exports = {
             const name = module.nameForCondition && module.nameForCondition();
             return (chunk) => chunk.name !== 'vendors' && /[\\/]node_modules[\\/]/.test(name);
           },
-        }
-      }
-    }
-  }
-}
+        },
+      },
+    },
+  },
+};

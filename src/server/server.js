@@ -2,17 +2,17 @@ import express from 'express';
 import webpack from 'webpack';
 import helmet from 'helmet';
 
-import React from 'react'
-import { renderToString } from 'react-dom/server' // una funcionalidad especial para servir string
-import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import React from 'react';
+import { renderToString } from 'react-dom/server'; // una funcionalidad especial para servir string
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import { StaticRouter } from 'react-router-dom'; // importamos o instalamos como depProducción
-import { renderRoutes } from 'react-router-config' // recibe un array de rutas para renderizar la app
+import { renderRoutes } from 'react-router-config'; // recibe un array de rutas para renderizar la app
 
-import config from  './config';
-import reducer from '../frontend/reducer'
-import initialState from '../frontend/initialState'
-import serverRoutes from '../frontend/routes/serverRoutes'
+import config from './config';
+import reducer from '../frontend/reducer';
+import initialState from '../frontend/initialState';
+import serverRoutes from '../frontend/routes/serverRoutes';
 import getManifest from './getManifest';
 
 const { ENV, PORT } = config;
@@ -21,8 +21,11 @@ const app = express();
 
 if (ENV === 'development') {
   console.log('Development config');
+  // eslint-disable-next-line global-require
   const webpackConfig = require('../../webpack.config.dev');
+  // eslint-disable-next-line global-require
   const webpackDevMiddleware = require('webpack-dev-middleware');
+  // eslint-disable-next-line global-require
   const webpackHotMiddleware = require('webpack-hot-middleware');
   const compiler = webpack(webpackConfig);
   const serverConfig = { port: PORT, hot: true };
@@ -47,7 +50,7 @@ if (ENV === 'development') {
       defaultSrc: ["'self'"],
       imgSrc: ["'self'", '*'],
       scriptSrc: ["'self'", "'sha256-v1JBoIesI9TciwINSA3MzVnWXjYZxUyaUNfMbkqTpiQ='"],
-    }
+    },
   }));
   app.use(helmet.permittedCrossDomainPolicies()); // la que se adecua al proyecto
   app.disable('x-powered-by'); // deshabilitamos una header asi el navegador no sabe que es un server con express
@@ -71,14 +74,14 @@ const setResponse = (html, preloadedState, manifest) => {
     <body>
       <div id="app">${html}</div>
       <script>
-        window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g,'\\u003c')}
+        window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
       </script>
       <script src="${mainBuild}" type="text/javascript"></script>
       <script src="${vendorBuild}" type="text/javascript"></script>
     </body>
     </html>
-  `)
-}
+  `);
+};
 
 const renderApp = (req, res) => {
   // definimos el store pero sin usar los dev tools de redux
@@ -89,7 +92,7 @@ const renderApp = (req, res) => {
       <StaticRouter location={req.url} context={{}}>
         {renderRoutes(serverRoutes)}
       </StaticRouter>
-    </Provider>
+    </Provider>,
   );
   res.send(setResponse(html, preloadedState, req.hashManifest));
 };

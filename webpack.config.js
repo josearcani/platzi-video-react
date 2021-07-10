@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -17,7 +17,7 @@ module.exports = {
   mode: process.env.ENV,
   // para resolver las extensiones
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
   },
   module: {
     rules: [
@@ -25,8 +25,8 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.(s*)css$/,
@@ -42,16 +42,16 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: 'assets/[hash].[ext]'
-            }
-          }
-        ]
-      }
-    ]
+              name: 'assets/[hash].[ext]',
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: path.resolve(__dirname, 'src/server/public')
+      cleanOnceBeforeBuildPatterns: path.resolve(__dirname, 'src/server/public'),
     }),
     new CompressionWebpackPlugin({
       test: /\.js$|\.css$/,
@@ -80,8 +80,8 @@ module.exports = {
             const name = module.nameForCondition && module.nameForCondition();
             return (chunk) => chunk.name !== 'vendors' && /[\\/]node_modules[\\/]/.test(name);
           },
-        }
-      }
-    }
-  }
-}
+        },
+      },
+    },
+  },
+};
