@@ -30,6 +30,7 @@ if (ENV === 'development') {
   app.use(webpackDevMiddleware(compiler, serverConfig));
   app.use(webpackHotMiddleware(compiler)); // hacer el hot module replacement de todo el proyecto
 } else {
+  console.log('Production config');
   // creamos un middleware para manifest inicio
   app.use((req, res, next) => {
     // si en hashManifest no hay nada regresar la función getManifest (solo si no existe)

@@ -1,8 +1,8 @@
-import Login from '../containers/Login'
-import Home from '../containers/Home'
-import Register from '../containers/Register'
-import NotFound from '../containers/NotFound'
-import Player from '../containers/Player'
+import Login from '../containers/Login';
+import Home from '../containers/Home';
+import Register from '../containers/Register';
+import NotFound from '../containers/NotFound';
+import Player from '../containers/Player';
 // importamos todos para el router
 
 const routes = [

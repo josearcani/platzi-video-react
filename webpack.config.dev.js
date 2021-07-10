@@ -1,11 +1,13 @@
 const path = require('path')
 const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   entry: ['./src/frontend/index.js', 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true'],
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'src/server/public'),
     filename: 'assets/app.js',
     publicPath: '/',
   },
@@ -22,14 +24,6 @@ module.exports = {
         use: {
           loader: 'babel-loader'
         }
-      },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader'
-          }
-        ]
       },
       {
         test: /\.(s*)css$/,
@@ -57,8 +51,31 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new ESLintPlugin(),
     new MiniCssExtractPlugin({
       filename: 'assets/app.css',
     })
-  ]
+  ],
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+    splitChunks: {
+      chunks: 'async',
+      name: false,
+      cacheGroups: {
+        vendors: {
+          name: 'vendors',
+          chunks: 'all',
+          reuseExistingChunk: true,
+          priority: 1,
+          filename: 'assets/vendor.js',
+          enforce: true,
+          test(module) {
+            const name = module.nameForCondition && module.nameForCondition();
+            return (chunk) => chunk.name !== 'vendors' && /[\\/]node_modules[\\/]/.test(name);
+          },
+        }
+      }
+    }
+  }
 }
